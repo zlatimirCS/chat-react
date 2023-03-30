@@ -1,8 +1,8 @@
 Steps:
 
-1. Create client folder
+1. Create client folder\
    -install all dependencies from package.json\
-   -create pages and routes with react-router-dom: home, login, register\
+   -create pages and routes with react-router-dom: home, login, register
 2. create server folder\
    -create dbConfig.js where we create connection with mongoDB\
    -create server.js where we create server with express and connect with \
