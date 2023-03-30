@@ -13,4 +13,8 @@ Steps:
    -create userRoutes.js where we create routes for user\
    -install bcryptjs for hashing password inside userRoutes.js\
    -create login and register routes\
-   -add routes to server.js\
+   -add routes to server.js
+3. in package.json add proxy: "http://localhost:5000" to avoid \
+   -cross-origin errors\
+   -add apicalls.js to client folder where we create functions for our api calls\
+   -create axios instance in index.js from appiCalls folder\

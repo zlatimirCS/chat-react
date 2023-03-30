@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { RegisterUser } from '../../apicalls/users';
 
 const Register = () => {
   const [user, setUser] = useState({
@@ -9,7 +10,16 @@ const Register = () => {
   });
 
   const registerUser = async () => {
-    console.log(user);
+    try {
+      const response = await RegisterUser(user);
+      if (response.success) {
+        alert(response.message);
+      } else {
+        alert(response.message);
+      }
+    } catch (error) {
+      alert('fail', error.message);
+    }
   };
   return (
     <div className='h-screen bg-primary flex items-center justify-center'>
