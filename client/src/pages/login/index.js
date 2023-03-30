@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { LoginUser } from '../../apicalls/users';
+import { toast } from 'react-hot-toast';
 
 const Login = () => {
   const [user, setUser] = useState({
@@ -12,14 +13,16 @@ const Login = () => {
     try {
       const response = await LoginUser(user);
       if (response.success) {
-        alert(response.message);
+        toast.success('Login success!');
         localStorage.setItem('token', response.data);
-        window.location.href = '/';
+        setTimeout(() => {
+          window.location.href = '/';
+        }, 2000);
       } else {
-        alert(response.message);
+        toast.error(response.message);
       }
     } catch (error) {
-      alert('fail', error.message);
+      toast.error(error.message);
     }
   };
   return (

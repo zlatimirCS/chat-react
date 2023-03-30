@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { RegisterUser } from '../../apicalls/users';
+import { toast } from 'react-hot-toast';
 
 const Register = () => {
   const [user, setUser] = useState({
@@ -13,12 +14,12 @@ const Register = () => {
     try {
       const response = await RegisterUser(user);
       if (response.success) {
-        alert(response.message);
+        toast.success('Successfully registered!');
       } else {
-        alert(response.message);
+        toast.error(response.message);
       }
     } catch (error) {
-      alert('fail', error.message);
+      toast.error(error.message);
     }
   };
   return (
