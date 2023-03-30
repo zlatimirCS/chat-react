@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { LoginUser } from '../../apicalls/users';
 
 const Login = () => {
   const [user, setUser] = useState({
@@ -8,7 +9,16 @@ const Login = () => {
   });
 
   const loginUser = async () => {
-    console.log(user);
+    try {
+      const response = await LoginUser(user);
+      if (response.success) {
+        alert(response.message);
+      } else {
+        alert(response.message);
+      }
+    } catch (error) {
+      alert('fail', error.message);
+    }
   };
   return (
     <div className='h-screen bg-primary flex items-center justify-center'>

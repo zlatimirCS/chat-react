@@ -18,3 +18,4 @@ Steps:
    -cross-origin errors\
    -add apicalls.js to client folder where we create functions for our api calls\
    -create axios instance in index.js from appiCalls folder\
+   -call RegisterUser and LoginUser functions from apiCalls.js in Register.js and Login.js \
