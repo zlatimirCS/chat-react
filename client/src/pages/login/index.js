@@ -13,6 +13,8 @@ const Login = () => {
       const response = await LoginUser(user);
       if (response.success) {
         alert(response.message);
+        localStorage.setItem('token', response.data);
+        window.location.href = '/';
       } else {
         alert(response.message);
       }

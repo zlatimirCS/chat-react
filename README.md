@@ -19,3 +19,5 @@ Steps:
    -add apicalls.js to client folder where we create functions for our api calls\
    -create axios instance in index.js from appiCalls folder\
    -call RegisterUser and LoginUser functions from apiCalls.js in Register.js and Login.js \
+   -add token to local storage Login.js\
+   -after login redirect to home page and check token exist in localStorage\
