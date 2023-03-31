@@ -24,3 +24,6 @@ Steps:
    -add nodemon.json to ignore client folder\
 4. start with setup for redux toolkit\
    -added loaderSlice.js\
+   -added store.js\
+   -configure store in store.js and import loaderReducer\
+   -add Provider to index.js\
