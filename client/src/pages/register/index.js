@@ -3,8 +3,11 @@ import { Link } from 'react-router-dom';
 import { RegisterUser } from '../../apicalls/users';
 import { toast } from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { showLoader } from '../../redux/loaderSlice';
 
 const Register = () => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const [user, setUser] = useState({
     name: '',
@@ -14,9 +17,13 @@ const Register = () => {
 
   const registerUser = async () => {
     try {
+      dispatch(showLoader());
       const response = await RegisterUser(user);
       if (response.success) {
         toast.success('Successfully registered!');
+        setTimeout(() => {
+          navigate('/login');
+        }, 2000);
       } else {
         toast.error(response.message);
       }

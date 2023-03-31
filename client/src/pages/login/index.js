@@ -3,9 +3,12 @@ import { Link } from 'react-router-dom';
 import { LoginUser } from '../../apicalls/users';
 import { toast } from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { showLoader, hideLoader } from '../../redux/loaderSlice';
 
 const Login = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [user, setUser] = useState({
     email: '',
     password: '',
@@ -13,6 +16,7 @@ const Login = () => {
 
   const loginUser = async () => {
     try {
+      dispatch(showLoader());
       const response = await LoginUser(user);
       if (response.success) {
         toast.success('Login success!');
@@ -32,6 +36,7 @@ const Login = () => {
     if (localStorage.getItem('token')) {
       navigate('/');
     }
+    dispatch(hideLoader());
   }, []);
   return (
     <div className='h-screen bg-primary flex items-center justify-center'>
