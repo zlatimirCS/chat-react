@@ -22,3 +22,5 @@ Steps:
    -add token to local storage Login.js\
    -after login redirect to home page and check token exist in localStorage\
    -add nodemon.json to ignore client folder\
+4. start with setup for redux toolkit\
+   -added loaderSlice.js\
