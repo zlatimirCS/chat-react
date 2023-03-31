@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { LoginUser } from '../../apicalls/users';
 import { toast } from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
+  const navigate = useNavigate();
   const [user, setUser] = useState({
     email: '',
     password: '',
@@ -25,6 +27,12 @@ const Login = () => {
       toast.error(error.message);
     }
   };
+
+  useEffect(() => {
+    if (localStorage.getItem('token')) {
+      navigate('/');
+    }
+  }, []);
   return (
     <div className='h-screen bg-primary flex items-center justify-center'>
       <div className='bg-white shadow-md p-5 flex flex-col gap-5 w-96'>
