@@ -2,15 +2,19 @@ import React, { useState, useEffect } from 'react';
 import { GetCurrentUser } from '../apicalls/users';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
+import { useSelector } from 'react-redux';
+import { SetUser } from '../redux/userSlice';
+import { useDispatch } from 'react-redux';
 
 const ProtectedRoute = ({ children }) => {
-  const [user, setUser] = useState(null);
+  const dispatch = useDispatch();
+  const { user } = useSelector((state) => state.userReducer);
   const navigate = useNavigate();
   const getCurrentUser = async () => {
     try {
       const response = await GetCurrentUser();
       if (response.success) {
-        setUser(response.data);
+        dispatch(SetUser(response.data));
       } else {
         toast.error(response.message);
         navigate('/login');
@@ -27,6 +31,8 @@ const ProtectedRoute = ({ children }) => {
       navigate('/login');
     }
   }, []);
+
+  console.log('user', user);
 
   return (
     <div>

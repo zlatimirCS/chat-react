@@ -28,3 +28,4 @@ Steps:
    -configure store in store.js and import loaderReducer\
    -add Provider to index.js\
    -import states to application with useSelector\
+5. create userSlice.js\
