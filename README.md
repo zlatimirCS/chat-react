@@ -27,3 +27,4 @@ Steps:
    -added store.js\
    -configure store in store.js and import loaderReducer\
    -add Provider to index.js\
+   -import states to application with useSelector\
