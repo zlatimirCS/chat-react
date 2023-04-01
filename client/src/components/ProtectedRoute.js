@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { GetCurrentUser } from '../apicalls/users';
+import { GetAllUsers, GetCurrentUser } from '../apicalls/users';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
 import { useSelector } from 'react-redux';
-import { SetUser } from '../redux/userSlice';
+import { SetUser, SetAllUsers } from '../redux/userSlice';
 import { useDispatch } from 'react-redux';
 
 const ProtectedRoute = ({ children }) => {
@@ -13,8 +13,10 @@ const ProtectedRoute = ({ children }) => {
   const getCurrentUser = async () => {
     try {
       const response = await GetCurrentUser();
+      const allUsersResponse = await GetAllUsers();
       if (response.success) {
         dispatch(SetUser(response.data));
+        dispatch(SetAllUsers(allUsersResponse.data));
       } else {
         toast.error(response.message);
         navigate('/login');
@@ -45,6 +47,13 @@ const ProtectedRoute = ({ children }) => {
         <div className='flex items-center gap-1'>
           <i class='ri-shield-user-line text-xl'></i>
           <h1 className='underline text-xl'>{user?.name}</h1>
+          <i
+            className='ri-logout-circle-line ml-5 text-xl cursor-pointer'
+            onClick={() => {
+              localStorage.removeItem('token');
+              navigate('/login');
+            }}
+          ></i>
         </div>
       </div>
 
