@@ -2,14 +2,16 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { CreateNewChat } from '../../../apicalls/chats';
 import { useDispatch } from 'react-redux';
-import { SetAllChats } from '../../../redux/userSlice';
+import { SetAllChats, SetSelectedChat } from '../../../redux/userSlice';
 import { toast } from 'react-hot-toast';
 import { showLoader, hideLoader } from '../../../redux/loaderSlice';
 
 const UsersList = ({ searchKey }) => {
   const dispatch = useDispatch();
-  let { allUsers, allChats, user } = useSelector((state) => state.userReducer);
-  console.log('all Chats', allChats);
+  let { allUsers, allChats, user, selectedChat } = useSelector(
+    (state) => state.userReducer
+  );
+  console.log('selectedChat', selectedChat);
 
   const addNewChat = async (rUserId) => {
     try {
@@ -30,6 +32,16 @@ const UsersList = ({ searchKey }) => {
     }
   };
 
+  const openChat = (rUserId) => {
+    const chat = allChats.find(
+      (chat) =>
+        chat.members.includes(rUserId) && chat.members.includes(user._id)
+    );
+    if (chat) {
+      dispatch(SetSelectedChat(chat));
+    }
+  };
+
   return (
     <div className='flex flex-col gap-3 mt-5'>
       {allUsers
@@ -43,7 +55,8 @@ const UsersList = ({ searchKey }) => {
           return (
             <div
               key={userObj._id}
-              className='shadow-sm border p-5 rounded-2xl bg-white flex justify-between items-center'
+              className='shadow-sm border p-5 rounded-2xl bg-white flex justify-between items-center cursor-pointer'
+              onClick={() => openChat(userObj._id)}
             >
               <div className='flex gap-2 items-center'>
                 {userObj.profilePic ? (
