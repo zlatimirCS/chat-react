@@ -4,7 +4,7 @@ const Message = require('../models/messageModel');
 const authMiddleware = require('../middlewares/authMiddleware');
 
 // create a new chat
-router.post('/create-new-chat', async (req, res) => {
+router.post('/create-new-chat', authMiddleware, async (req, res) => {
   try {
     const newChat = new Chat(req.body);
     const savedChat = await newChat.save();
@@ -23,7 +23,7 @@ router.post('/create-new-chat', async (req, res) => {
 });
 
 // get all chats of a current user
-router.get('/get-all-chats', async (req, res) => {
+router.get('/get-all-chats', authMiddleware, async (req, res) => {
   try {
     const chats = await Chat.find({ members: { $in: [req.body.userId] } });
     res.send({
