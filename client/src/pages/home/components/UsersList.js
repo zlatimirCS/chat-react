@@ -35,8 +35,9 @@ const UsersList = ({ searchKey }) => {
       {allUsers
         .filter(
           (userObj) =>
-            userObj.name.toLowerCase().includes(searchKey.toLowerCase()) &&
-            searchKey
+            (userObj.name.toLowerCase().includes(searchKey.toLowerCase()) &&
+              searchKey) ||
+            allChats.some((chatObj) => chatObj.members.includes(userObj._id))
         )
         .map((userObj) => {
           return (
