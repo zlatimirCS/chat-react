@@ -3,8 +3,9 @@ import { GetAllUsers, GetCurrentUser } from '../apicalls/users';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
 import { useSelector } from 'react-redux';
-import { SetUser, SetAllUsers } from '../redux/userSlice';
+import { SetUser, SetAllUsers, SetAllChats } from '../redux/userSlice';
 import { useDispatch } from 'react-redux';
+import { GetAllChats } from '../apicalls/chats';
 
 const ProtectedRoute = ({ children }) => {
   const dispatch = useDispatch();
@@ -14,9 +15,11 @@ const ProtectedRoute = ({ children }) => {
     try {
       const response = await GetCurrentUser();
       const allUsersResponse = await GetAllUsers();
+      const allChatsResponse = await GetAllChats();
       if (response.success) {
         dispatch(SetUser(response.data));
         dispatch(SetAllUsers(allUsersResponse.data));
+        dispatch(SetAllChats(allChatsResponse.data));
       } else {
         toast.error(response.message);
         navigate('/login');
@@ -45,7 +48,7 @@ const ProtectedRoute = ({ children }) => {
           <h1 className='text-primary text-2xl uppercase font-bold'>Chat</h1>
         </div>
         <div className='flex items-center gap-1'>
-          <i class='ri-shield-user-line text-xl'></i>
+          <i className='ri-shield-user-line text-xl'></i>
           <h1 className='underline text-xl'>{user?.name}</h1>
           <i
             className='ri-logout-circle-line ml-5 text-xl cursor-pointer'
