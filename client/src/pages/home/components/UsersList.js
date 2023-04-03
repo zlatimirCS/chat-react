@@ -23,6 +23,7 @@ const UsersList = ({ searchKey }) => {
         const newChat = response.data;
         const newAllChats = [...allChats, newChat];
         dispatch(SetAllChats(newAllChats));
+        dispatch(SetSelectedChat(newChat));
       } else {
         toast.error(response.message);
       }
@@ -33,6 +34,7 @@ const UsersList = ({ searchKey }) => {
   };
 
   const openChat = (rUserId) => {
+    console.log('open open');
     const chat = allChats.find(
       (chat) =>
         chat.members.includes(rUserId) && chat.members.includes(user._id)
