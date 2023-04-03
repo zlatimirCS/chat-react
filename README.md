@@ -29,3 +29,7 @@ Steps:
    -add Provider to index.js\
    -import states to application with useSelector\
 5. create userSlice.js\
+   -display all the users in Home.js\
+6. create chatModel
+7. create chatRoutes
+   -create models for chat and message\
