@@ -19,16 +19,18 @@ const ChatArea = () => {
 
   const sendNewMessage = async () => {
     try {
-      dispatch(showLoader());
+      // dispatch(showLoader());
       const message = {
         sender: user._id,
         chat: selectedChat._id,
         text: newMessage,
       };
       const response = await SendMessage(message);
-      dispatch(hideLoader());
+      const response1 = await GetMessages(selectedChat._id);
+      // dispatch(hideLoader());
       if (response.success) {
         setNewMessage('');
+        setMessages(response1.data);
       }
     } catch (error) {
       dispatch(hideLoader());
@@ -60,7 +62,7 @@ const ChatArea = () => {
   console.log('messages', messages);
   return (
     <div className='bg-white h-[85vh] border rounded-2xl w-full flex flex-col p-5'>
-      <div style={{ flex: 1 }}>
+      <div style={{ flex: 1, overflowY: 'scroll' }}>
         {/*1st part receipent user*/}
         <div>
           <div className='flex gap-2 items-center mb-2'>
@@ -84,7 +86,7 @@ const ChatArea = () => {
         </div>
 
         {/*2nd part chat messages*/}
-        <div className='mt-5'>
+        <div className='mt-5 mb-5'>
           <div className='flex flex-col gap-2'>
             {messages.map((message) => {
               const isCurrentUserSender = message.sender === user._id;
