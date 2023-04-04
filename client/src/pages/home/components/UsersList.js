@@ -21,11 +21,17 @@ const UsersList = ({ searchKey }) => {
       dispatch(hideLoader());
       if (response.success) {
         toast.success(response.message);
-        const newChat = response.data;
+        dispatch(SetAllChats(response1.data));
+        // const newChat = response.data;
+        // console.log('newChat', newChat);
+        const chat = response1.data.find(
+          (chat) =>
+            chat.members.map((mem) => mem._id).includes(rUserId) &&
+            chat.members.map((mem) => mem._id).includes(user._id)
+        );
         // const newAllChats = [...allChats, newChat];
         // dispatch(SetAllChats(newAllChats));
-        dispatch(SetSelectedChat(newChat));
-        dispatch(SetAllChats(response1.data));
+        dispatch(SetSelectedChat(chat));
       } else {
         toast.error(response.message);
       }
