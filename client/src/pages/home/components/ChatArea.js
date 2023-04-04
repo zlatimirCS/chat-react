@@ -11,7 +11,7 @@ const ChatArea = () => {
   return (
     <div className='bg-white h-[85vh] border rounded-2xl w-full flex flex-col justify-between p-5'>
       {/*1st part receipent user*/}
-      <div>Receipent user</div>
+      <div>{receipentUser.name}</div>
 
       {/*2nd part chat messages*/}
       <div>Chat messages</div>
