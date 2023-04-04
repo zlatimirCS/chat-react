@@ -11,7 +11,7 @@ const UsersList = ({ searchKey }) => {
   let { allUsers, allChats, user, selectedChat } = useSelector(
     (state) => state.userReducer
   );
-  console.log('allChats', allChats);
+  console.log('selectedChat', selectedChat);
 
   const addNewChat = async (rUserId) => {
     try {
@@ -45,7 +45,7 @@ const UsersList = ({ searchKey }) => {
     console.log('open open');
     const chat = allChats.find(
       (chat) =>
-        chat.members.map((mem) => mem._id).includes(rUserId) &&
+        chat.members.map((mem) => mem._id).includes(rUserId._id) &&
         chat.members.map((mem) => mem._id).includes(user._id)
     );
     if (chat) {
@@ -64,14 +64,24 @@ const UsersList = ({ searchKey }) => {
     );
   };
 
+  const isSelectedChat = (rUserId) => {
+    if (selectedChat) {
+      return selectedChat.members.map((mem) => mem._id).includes(rUserId._id);
+    }
+    return false;
+  };
+
   return (
     <div className='flex flex-col gap-3 mt-5'>
       {getData().map((userObj) => {
         return (
           <div
             key={userObj._id}
-            className='shadow-sm border p-5 rounded-2xl bg-white flex justify-between items-center cursor-pointer'
-            onClick={() => openChat(userObj._id)}
+            // className='shadow-sm border p-5 rounded-2xl bg-white flex justify-between items-center cursor-pointer'
+            className={`shadow-sm border p-5 rounded-2xl flex justify-between items-center cursor-pointer ${
+              isSelectedChat(userObj) ? 'border-primary' : 'border-gray-300'
+            } ${isSelectedChat(userObj) ? 'bg-gray-100' : 'bg-white'}`}
+            onClick={() => openChat(userObj)}
           >
             <div className='flex gap-2 items-center'>
               {userObj.profilePic ? (
