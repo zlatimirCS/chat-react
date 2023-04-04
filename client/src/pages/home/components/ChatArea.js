@@ -1,13 +1,63 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
+import { SendMessage } from '../../../apicalls/messages';
+import { useDispatch } from 'react-redux';
+import { showLoader, hideLoader } from '../../../redux/loaderSlice';
+import { toast } from 'react-hot-toast';
+import { GetMessages } from '../../../apicalls/messages';
 
 const ChatArea = () => {
+  const dispatch = useDispatch();
+  const [newMessage, setNewMessage] = React.useState('');
+  const [messages, setMessages] = React.useState([]);
   const { selectedChat, user } = useSelector((state) => state.userReducer);
   console.log('selectedChat', selectedChat);
   const receipentUser = selectedChat.members.find(
     (mem) => mem._id !== user._id
   );
   console.log('receipentUser', receipentUser);
+
+  const sendNewMessage = async () => {
+    try {
+      dispatch(showLoader());
+      const message = {
+        sender: user._id,
+        chat: selectedChat._id,
+        text: newMessage,
+      };
+      const response = await SendMessage(message);
+      dispatch(hideLoader());
+      if (response.success) {
+        setNewMessage('');
+      }
+    } catch (error) {
+      dispatch(hideLoader());
+      toast.error(error.message);
+    }
+  };
+
+  const getMessages = async () => {
+    if (selectedChat) {
+      try {
+        dispatch(showLoader());
+        const response = await GetMessages(selectedChat._id);
+        console.log('response', response);
+        dispatch(hideLoader());
+        if (response.success) {
+          setMessages(response.data);
+        }
+      } catch (error) {
+        dispatch(hideLoader());
+        toast.error(error.message);
+      }
+    }
+  };
+
+  useEffect(() => {
+    getMessages();
+  }, [selectedChat]);
+
+  console.log('messages', messages);
   return (
     <div className='bg-white h-[85vh] border rounded-2xl w-full flex flex-col justify-between p-5'>
       {/*1st part receipent user*/}
@@ -33,7 +83,11 @@ const ChatArea = () => {
       </div>
 
       {/*2nd part chat messages*/}
-      <div>Chat messages</div>
+      <div>
+        {messages.map((message) => {
+          return <p key={message._id}>{message.text}</p>;
+        })}
+      </div>
 
       {/*3rd part chat input*/}
       <div>
@@ -42,9 +96,14 @@ const ChatArea = () => {
             type='text'
             placeholder='Type a message'
             className='w-[90%] border-0 h-full rounded-xl focus:border-none'
+            value={newMessage}
+            onChange={(e) => setNewMessage(e.target.value)}
           />
-          <button className='bg-primary text-white p-2 rounded h-max'>
-            SEND
+          <button
+            className='bg-primary text-white p-2 rounded h-max'
+            onClick={sendNewMessage}
+          >
+            <i className='ri-send-plane-2-line'></i>
           </button>
         </div>
       </div>

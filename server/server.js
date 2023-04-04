@@ -7,9 +7,11 @@ const PORT = process.env.PORT || 5000;
 
 const userRoutes = require('./routes/userRoutes');
 const chatRoutes = require('./routes/chatsRoute');
+const messageRoutes = require('./routes/messageRoute');
 app.use(express.json());
 
 app.use('/api/users', userRoutes);
 app.use('/api/chats', chatRoutes);
+app.use('/api/messages', messageRoutes);
 
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
