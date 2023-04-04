@@ -78,9 +78,9 @@ const UsersList = ({ searchKey }) => {
           <div
             key={userObj._id}
             // className='shadow-sm border p-5 rounded-2xl bg-white flex justify-between items-center cursor-pointer'
-            className={`shadow-sm border p-5 rounded-2xl flex justify-between items-center cursor-pointer ${
+            className={`shadow-sm border p-5 rounded-2xl flex justify-between items-center cursor-pointer bg-white ${
               isSelectedChat(userObj) ? 'border-primary' : 'border-gray-300'
-            } ${isSelectedChat(userObj) ? 'bg-gray-100' : 'bg-white'}`}
+            }`}
             onClick={() => openChat(userObj)}
           >
             <div className='flex gap-2 items-center'>
