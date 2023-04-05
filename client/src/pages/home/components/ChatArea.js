@@ -63,7 +63,7 @@ const ChatArea = () => {
   console.log('messages', messages);
   return (
     <div className='bg-white h-[85vh] border rounded-2xl w-full flex flex-col p-5'>
-      <div style={{ flex: 1, overflowY: 'scroll' }}>
+      <div>
         {/*1st part receipent user*/}
         <div>
           <div className='flex gap-2 items-center mb-2'>
@@ -87,7 +87,7 @@ const ChatArea = () => {
         </div>
 
         {/*2nd part chat messages*/}
-        <div className='mt-5 mb-5'>
+        <div className='h-[70vh] overflow-y-scroll p-5'>
           <div className='flex flex-col gap-2'>
             {messages.map((message) => {
               const isCurrentUserSender = message.sender === user._id;
@@ -103,7 +103,11 @@ const ChatArea = () => {
                     >
                       {message.text}
                     </h1>
-                    <h1 className='text-gray-500 text-sm'>
+                    <h1
+                      className={`text-gray-500 text-sm ${
+                        isCurrentUserSender && 'self-end'
+                      }`}
+                    >
                       {moment(message.createdAt).format('hh:mm A')}
                     </h1>
                   </div>
