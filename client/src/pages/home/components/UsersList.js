@@ -90,6 +90,20 @@ const UsersList = ({ searchKey }) => {
     }
     return null;
   };
+
+  const getUnreadMessages = (rUserId) => {
+    const chat = allChats.find((chat) =>
+      chat.members.map((mem) => mem._id).includes(rUserId)
+    );
+    if (chat && chat.unreadMessages && chat?.lastMessage?.sender !== user._id) {
+      return (
+        <div className='bg-primary text-white text-xs px-1 rounded-full flex justify-center items-center w-5 h-5'>
+          {chat.unreadMessages}
+        </div>
+      );
+    }
+    return null;
+  };
   return (
     <div className='flex flex-col gap-3 mt-5 w-96'>
       {getData().map((userObj) => {
@@ -118,7 +132,10 @@ const UsersList = ({ searchKey }) => {
                 </div>
               )}
               <div className='flex flex-col gap-1 w-full'>
-                <h1>{userObj.name}</h1>
+                <div className='flex gap-3 items-center'>
+                  <h1>{userObj.name}</h1>
+                  {getUnreadMessages(userObj._id)}
+                </div>
                 {getLastMsg(userObj._id)}
               </div>
             </div>

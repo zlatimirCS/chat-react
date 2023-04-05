@@ -4,7 +4,7 @@ import { SendMessage } from '../../../apicalls/messages';
 import { useDispatch } from 'react-redux';
 import { showLoader, hideLoader } from '../../../redux/loaderSlice';
 import { toast } from 'react-hot-toast';
-import { GetMessages } from '../../../apicalls/messages';
+import { GetMessages, ClearUnreadMessages } from '../../../apicalls/messages';
 import moment from 'moment';
 
 const ChatArea = () => {
@@ -53,8 +53,21 @@ const ChatArea = () => {
     }
   };
 
+  const clearUnreadMessages = async () => {
+    if (selectedChat) {
+      try {
+        const response = await ClearUnreadMessages(selectedChat._id);
+      } catch (error) {
+        toast.error(error.message);
+      }
+    }
+  };
+
   useEffect(() => {
     getMessages();
+    if (selectedChat?.lastMessage?.sender !== user?._id) {
+      clearUnreadMessages();
+    }
   }, [selectedChat]);
   return (
     <div className='bg-white h-[85vh] border rounded-2xl w-full flex flex-col p-5'>

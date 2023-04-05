@@ -53,4 +53,32 @@ router.get('/get-all-messages/:chatId', async (req, res) => {
   }
 });
 
+router.post('/clear-unread-messages/:chatId', async (req, res) => {
+  try {
+    const chat = await Chat.findByIdAndUpdate(
+      { _id: req.params.chatId },
+      { unreadMessages: 0 }
+    );
+    const messages = await Message.updateMany(
+      {
+        chat: req.params.chatId,
+      },
+      {
+        read: true,
+      }
+    );
+
+    res.send({
+      message: 'Unread messages cleared',
+      success: true,
+    });
+  } catch (error) {
+    res.send({
+      message: "Couldn't clear unread messages",
+      success: false,
+      error: error.message,
+    });
+  }
+});
+
 module.exports = router;
