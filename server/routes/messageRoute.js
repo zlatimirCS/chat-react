@@ -37,7 +37,6 @@ router.post('/new-message', async (req, res) => {
 });
 
 router.get('/get-all-messages/:chatId', async (req, res) => {
-  console.log('req params', req.params);
   try {
     const messages = await Message.find({
       chat: req.params.chatId,

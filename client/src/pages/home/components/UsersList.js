@@ -11,7 +11,6 @@ const UsersList = ({ searchKey }) => {
   let { allUsers, allChats, user, selectedChat } = useSelector(
     (state) => state.userReducer
   );
-  console.log('selectedChat', selectedChat);
 
   const addNewChat = async (rUserId) => {
     try {
@@ -22,15 +21,11 @@ const UsersList = ({ searchKey }) => {
       if (response.success) {
         toast.success(response.message);
         dispatch(SetAllChats(response1.data));
-        // const newChat = response.data;
-        // console.log('newChat', newChat);
         const chat = response1.data.find(
           (chat) =>
             chat.members.map((mem) => mem._id).includes(rUserId) &&
             chat.members.map((mem) => mem._id).includes(user._id)
         );
-        // const newAllChats = [...allChats, newChat];
-        // dispatch(SetAllChats(newAllChats));
         dispatch(SetSelectedChat(chat));
       } else {
         toast.error(response.message);
@@ -42,7 +37,6 @@ const UsersList = ({ searchKey }) => {
   };
 
   const openChat = (rUserId) => {
-    console.log('open open');
     const chat = allChats.find(
       (chat) =>
         chat.members.map((mem) => mem._id).includes(rUserId._id) &&
@@ -77,8 +71,6 @@ const UsersList = ({ searchKey }) => {
     );
 
     if (chat && chat.lastMessage) {
-      console.log('chat.lastMessage', chat.lastMessage);
-      console.log('ruser id', rUserId);
       const lastMsgSender =
         chat?.lastMessage?.sender === user._id ? 'You:' : '';
       return `${lastMsgSender} ${chat?.lastMessage?.text}`;
@@ -88,8 +80,6 @@ const UsersList = ({ searchKey }) => {
     }
     return null;
   };
-
-  console.log('all chats', allChats);
   return (
     <div className='flex flex-col gap-3 mt-5'>
       {getData().map((userObj) => {

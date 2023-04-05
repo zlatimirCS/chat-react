@@ -17,7 +17,6 @@ export const GetMessages = async (chatId) => {
     const response = await axiosInstance.get(
       `/api/messages/get-all-messages/${chatId}`
     );
-    console.log('response111', response);
     return response.data;
   } catch (error) {
     throw error;

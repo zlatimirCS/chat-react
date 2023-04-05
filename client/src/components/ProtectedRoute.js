@@ -37,8 +37,6 @@ const ProtectedRoute = ({ children }) => {
     }
   }, []);
 
-  console.log('user', user);
-
   return (
     <div className='h-screen w-screen bg-gray-100 p-2'>
       {/*header*/}

@@ -12,11 +12,9 @@ const ChatArea = () => {
   const [newMessage, setNewMessage] = React.useState('');
   const [messages, setMessages] = React.useState([]);
   const { selectedChat, user } = useSelector((state) => state.userReducer);
-  console.log('selectedChat', selectedChat);
   const receipentUser = selectedChat.members.find(
     (mem) => mem._id !== user._id
   );
-  console.log('receipentUser', receipentUser);
 
   const sendNewMessage = async () => {
     try {
@@ -44,7 +42,6 @@ const ChatArea = () => {
       try {
         dispatch(showLoader());
         const response = await GetMessages(selectedChat._id);
-        console.log('response', response);
         dispatch(hideLoader());
         if (response.success) {
           setMessages(response.data);
@@ -59,8 +56,6 @@ const ChatArea = () => {
   useEffect(() => {
     getMessages();
   }, [selectedChat]);
-
-  console.log('messages', messages);
   return (
     <div className='bg-white h-[85vh] border rounded-2xl w-full flex flex-col p-5'>
       <div>
