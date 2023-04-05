@@ -5,6 +5,7 @@ import { useDispatch } from 'react-redux';
 import { showLoader, hideLoader } from '../../../redux/loaderSlice';
 import { toast } from 'react-hot-toast';
 import { GetMessages } from '../../../apicalls/messages';
+import moment from 'moment';
 
 const ChatArea = () => {
   const dispatch = useDispatch();
@@ -92,9 +93,19 @@ const ChatArea = () => {
               const isCurrentUserSender = message.sender === user._id;
               return (
                 <div className={`flex ${isCurrentUserSender && 'justify-end'}`}>
-                  <div className='flex flex-col'>
-                    <h1>{message.text}</h1>
-                    <h1>{message.createdAt}</h1>
+                  <div className='flex flex-col gap-1'>
+                    <h1
+                      className={`${
+                        isCurrentUserSender
+                          ? 'bg-primary text-white rounded-bl-none'
+                          : 'bg-gray-200 text-primary rounded-tr-none'
+                      } p-2 rounded-xl`}
+                    >
+                      {message.text}
+                    </h1>
+                    <h1 className='text-gray-500 text-sm'>
+                      {moment(message.createdAt).format('hh:mm A')}
+                    </h1>
                   </div>
                 </div>
               );
