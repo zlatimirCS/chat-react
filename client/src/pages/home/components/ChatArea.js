@@ -92,7 +92,10 @@ const ChatArea = () => {
             {messages.map((message) => {
               const isCurrentUserSender = message.sender === user._id;
               return (
-                <div className={`flex ${isCurrentUserSender && 'justify-end'}`}>
+                <div
+                  key={message._id}
+                  className={`flex ${isCurrentUserSender && 'justify-end'}`}
+                >
                   <div className='flex flex-col gap-1'>
                     <h1
                       className={`${
