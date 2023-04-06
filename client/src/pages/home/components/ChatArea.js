@@ -6,6 +6,7 @@ import { showLoader, hideLoader } from '../../../redux/loaderSlice';
 import { toast } from 'react-hot-toast';
 import { GetMessages, ClearUnreadMessages } from '../../../apicalls/messages';
 import moment from 'moment';
+import { SetMessagesRead } from '../../../redux/userSlice';
 
 const ChatArea = () => {
   const dispatch = useDispatch();
@@ -54,9 +55,14 @@ const ChatArea = () => {
   };
 
   const clearUnreadMessages = async () => {
+    console.log('clearing unread messages');
     if (selectedChat) {
+      console.log('clearing unread messages2');
       try {
         const response = await ClearUnreadMessages(selectedChat._id);
+        if (response.success) {
+          dispatch(SetMessagesRead(true));
+        }
       } catch (error) {
         toast.error(error.message);
       }

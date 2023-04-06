@@ -9,7 +9,7 @@ import moment from 'moment';
 
 const UsersList = ({ searchKey }) => {
   const dispatch = useDispatch();
-  let { allUsers, allChats, user, selectedChat } = useSelector(
+  let { allUsers, allChats, user, selectedChat, messagesRead } = useSelector(
     (state) => state.userReducer
   );
 
@@ -95,7 +95,12 @@ const UsersList = ({ searchKey }) => {
     const chat = allChats.find((chat) =>
       chat.members.map((mem) => mem._id).includes(rUserId)
     );
-    if (chat && chat.unreadMessages && chat?.lastMessage?.sender !== user._id) {
+    if (
+      chat &&
+      chat.unreadMessages &&
+      chat?.lastMessage?.sender !== user._id &&
+      !messagesRead
+    ) {
       return (
         <div className='bg-primary text-white text-xs px-1 rounded-full flex justify-center items-center w-5 h-5'>
           {chat.unreadMessages}
