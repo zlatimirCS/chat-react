@@ -104,7 +104,7 @@ const ChatArea = () => {
                   key={message._id}
                   className={`flex ${isCurrentUserSender && 'justify-end'}`}
                 >
-                  <div className='flex flex-col gap-1'>
+                  <div className='flex flex-col'>
                     <h1
                       className={`${
                         isCurrentUserSender
@@ -114,13 +114,26 @@ const ChatArea = () => {
                     >
                       {message.text}
                     </h1>
-                    <h1
-                      className={`text-gray-500 text-sm ${
-                        isCurrentUserSender && 'self-end'
+                    <div
+                      className={`flex gap-1 items-center ${
+                        isCurrentUserSender && 'justify-end'
                       }`}
                     >
-                      {moment(message.createdAt).format('hh:mm A')}
-                    </h1>
+                      <h1
+                        className={`text-gray-500 text-sm ${
+                          isCurrentUserSender && 'self-end'
+                        }`}
+                      >
+                        {moment(message.createdAt).format('hh:mm A')}
+                      </h1>
+                      {isCurrentUserSender && (
+                        <i
+                          className={`ri-check-double-line ${
+                            message.read ? 'text-green-600' : 'text-gray-500'
+                          }`}
+                        ></i>
+                      )}
+                    </div>
                   </div>
                 </div>
               );
