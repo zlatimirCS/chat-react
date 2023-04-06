@@ -18,6 +18,11 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: false,
     },
+    lastActive: {
+      type: Number,
+      required: true,
+      default: 1,
+    },
   },
   { timestamps: true }
 );

@@ -2,6 +2,7 @@ const router = require('express').Router();
 const authMiddleware = require('../middlewares/authMiddleware');
 const Message = require('../models/messageModel');
 const Chat = require('../models/chatModel');
+const User = require('../models/userModel');
 const { findById, findOneAndUpdate } = require('../models/chatModel');
 
 // new message
@@ -19,6 +20,11 @@ router.post('/new-message', async (req, res) => {
         $inc: { unreadMessages: 1 },
       }
     );
+    const user = await User.findOneAndUpdate(
+      { _id: req.body.recipient },
+      { lastActive: req.body.lastActive }
+    );
+    await user.save();
     await chat.save();
     res.send({
       message: 'Message sent successfully',
@@ -51,6 +57,15 @@ router.get('/get-all-messages/:chatId', async (req, res) => {
       error: error.message,
     });
   }
+});
+
+router.get('/get-all-messages', async (req, res) => {
+  try {
+    const messages = await Message.find();
+    res.send({
+      data: messages,
+    });
+  } catch (error) {}
 });
 
 router.post('/clear-unread-messages/:chatId', async (req, res) => {

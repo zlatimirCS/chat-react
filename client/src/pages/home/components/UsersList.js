@@ -6,11 +6,13 @@ import { SetAllChats, SetSelectedChat } from '../../../redux/userSlice';
 import { toast } from 'react-hot-toast';
 import { showLoader, hideLoader } from '../../../redux/loaderSlice';
 import moment from 'moment';
+import { GetAllUsers } from '../../../apicalls/users';
 
 const UsersList = ({ searchKey }) => {
   const dispatch = useDispatch();
   let { allUsers, allChats, user, selectedChat, messagesRead, refetch } =
     useSelector((state) => state.userReducer);
+  const [data, setData] = React.useState([]);
 
   const addNewChat = async (rUserId) => {
     try {
@@ -132,53 +134,82 @@ const UsersList = ({ searchKey }) => {
     return test;
   };
 
+  const test2 = async () => {
+    const responseAll = await GetAllUsers();
+    const test = responseAll.data.filter(
+      (userObj) =>
+        (userObj.name.toLowerCase().includes(searchKey.toLowerCase()) &&
+          searchKey) ||
+        allChats.some((chatObj) =>
+          chatObj.members.map((mem) => mem._id).includes(userObj._id)
+        )
+    );
+    // sort test by biggest last active number
+    test.sort((a, b) => {
+      return b.lastActive - a.lastActive;
+    });
+    // sort users by last active by time
+    // test.sort((a, b) => {
+    //   const x = new Date(a.lastActive);
+    //   const y = new Date(b.lastActive);
+    //   return x - y;
+    // });
+    console.log('test', test);
+    setData(test);
+  };
+
+  useEffect(() => {
+    test2();
+  }, [refetch, allUsers]);
+
   return (
     <div className='flex flex-col gap-3 mt-5 w-96'>
-      {getData().map((userObj) => {
-        return (
-          <div
-            key={userObj._id}
-            // className='shadow-sm border p-5 rounded-2xl bg-white flex justify-between items-center cursor-pointer'
-            className={`shadow-sm border p-5 rounded-2xl flex items-center cursor-pointer bg-white w-full ${
-              isSelectedChat(userObj) ? 'border-primary' : 'border-gray-300'
-            }`}
-            onClick={() => openChat(userObj)}
-          >
-            <div className='flex gap-2 items-center w-full '>
-              {userObj.profilePic ? (
-                <img
-                  src={userObj.profilePic}
-                  alt='profile pic'
-                  className='rounded-full w-10 h-10'
-                />
-              ) : null}
-              {!userObj.profilePic && (
-                <div className='bg-gray-500 rounded-full flex items-center justify-center w-10 h-10'>
-                  <h1 className='uppercase text-xl font-bold text-white'>
-                    {userObj.name[0]}
-                  </h1>
+      {data &&
+        data.map((userObj) => {
+          return (
+            <div
+              key={userObj._id}
+              // className='shadow-sm border p-5 rounded-2xl bg-white flex justify-between items-center cursor-pointer'
+              className={`shadow-sm border p-5 rounded-2xl flex items-center cursor-pointer bg-white w-full ${
+                isSelectedChat(userObj) ? 'border-primary' : 'border-gray-300'
+              }`}
+              onClick={() => openChat(userObj)}
+            >
+              <div className='flex gap-2 items-center w-full '>
+                {userObj.profilePic ? (
+                  <img
+                    src={userObj.profilePic}
+                    alt='profile pic'
+                    className='rounded-full w-10 h-10'
+                  />
+                ) : null}
+                {!userObj.profilePic && (
+                  <div className='bg-gray-500 rounded-full flex items-center justify-center w-10 h-10'>
+                    <h1 className='uppercase text-xl font-bold text-white'>
+                      {userObj.name[0]}
+                    </h1>
+                  </div>
+                )}
+                <div className='flex flex-col gap-1 w-full'>
+                  <div className='flex gap-3 items-center'>
+                    <h1>{userObj.name}</h1>
+                    {getUnreadMessages(userObj._id)}
+                  </div>
+                  {getLastMsg(userObj._id)}
                 </div>
-              )}
-              <div className='flex flex-col gap-1 w-full'>
-                <div className='flex gap-3 items-center'>
-                  <h1>{userObj.name}</h1>
-                  {getUnreadMessages(userObj._id)}
-                </div>
-                {getLastMsg(userObj._id)}
+              </div>
+              <div onClick={() => addNewChat(userObj._id)}>
+                {!allChats.find((chatObj) =>
+                  chatObj.members.map((mem) => mem._id).includes(userObj._id)
+                ) && (
+                  <button className='border-primary border text-primary bg-white p-2 rounded'>
+                    Create Chat
+                  </button>
+                )}
               </div>
             </div>
-            <div onClick={() => addNewChat(userObj._id)}>
-              {!allChats.find((chatObj) =>
-                chatObj.members.map((mem) => mem._id).includes(userObj._id)
-              ) && (
-                <button className='border-primary border text-primary bg-white p-2 rounded'>
-                  Create Chat
-                </button>
-              )}
-            </div>
-          </div>
-        );
-      })}
+          );
+        })}
     </div>
   );
 };

@@ -4,29 +4,50 @@ import { SendMessage } from '../../../apicalls/messages';
 import { useDispatch } from 'react-redux';
 import { showLoader, hideLoader } from '../../../redux/loaderSlice';
 import { toast } from 'react-hot-toast';
-import { GetMessages, ClearUnreadMessages } from '../../../apicalls/messages';
+import {
+  GetMessages,
+  ClearUnreadMessages,
+  GetAllMessages,
+} from '../../../apicalls/messages';
+import { GetAllUsers } from '../../../apicalls/users';
 import moment from 'moment';
-import { SetMessagesRead } from '../../../redux/userSlice';
+import { SetMessagesRead, SetRefetch } from '../../../redux/userSlice';
 
 const ChatArea = () => {
   const dispatch = useDispatch();
   const [newMessage, setNewMessage] = React.useState('');
   const [messages, setMessages] = React.useState([]);
-  const { selectedChat, user } = useSelector((state) => state.userReducer);
+  const { selectedChat, user, refetch, allMessages } = useSelector(
+    (state) => state.userReducer
+  );
   const receipentUser = selectedChat.members.find(
     (mem) => mem._id !== user._id
   );
 
   const sendNewMessage = async () => {
     try {
+      const responseAll = await GetAllUsers();
+      // find biggest lastActive from responseAll.data
+      const lastActive = responseAll.data.reduce((acc, curr) => {
+        return acc.lastActive > curr.lastActive ? acc : curr;
+      });
+      console.log('lastActive', lastActive.lastActive);
+
       // dispatch(showLoader());
+
       const message = {
         sender: user._id,
         chat: selectedChat._id,
         text: newMessage,
+        recipient: receipentUser._id,
+        lastActive: lastActive.lastActive + 1,
       };
+
       const response = await SendMessage(message);
       const response1 = await GetMessages(selectedChat._id);
+
+      console.log('responseall', responseAll);
+      dispatch(SetRefetch(!refetch));
       // dispatch(hideLoader());
       if (response.success) {
         setNewMessage('');

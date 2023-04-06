@@ -33,3 +33,12 @@ export const ClearUnreadMessages = async (chatId) => {
     throw error;
   }
 };
+
+export const GetAllMessages = async () => {
+  try {
+    const response = await axiosInstance.get(`/api/messages/get-all-messages`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};

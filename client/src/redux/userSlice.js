@@ -8,6 +8,7 @@ const userSlice = createSlice({
     allChats: [],
     selectedChat: null,
     messagesRead: false,
+    refetch: false,
   },
   reducers: {
     SetUser: (state, action) => {
@@ -25,6 +26,9 @@ const userSlice = createSlice({
     SetMessagesRead: (state, action) => {
       state.messagesRead = action.payload;
     },
+    SetRefetch: (state, action) => {
+      state.refetch = action.payload;
+    },
   },
 });
 
@@ -34,5 +38,6 @@ export const {
   SetAllChats,
   SetSelectedChat,
   SetMessagesRead,
+  SetRefetch,
 } = userSlice.actions;
 export default userSlice.reducer;
