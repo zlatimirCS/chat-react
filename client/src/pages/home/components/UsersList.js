@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { CreateNewChat, GetAllChats } from '../../../apicalls/chats';
 import { useDispatch } from 'react-redux';
@@ -9,9 +9,8 @@ import moment from 'moment';
 
 const UsersList = ({ searchKey }) => {
   const dispatch = useDispatch();
-  let { allUsers, allChats, user, selectedChat, messagesRead } = useSelector(
-    (state) => state.userReducer
-  );
+  let { allUsers, allChats, user, selectedChat, messagesRead, refetch } =
+    useSelector((state) => state.userReducer);
 
   const addNewChat = async (rUserId) => {
     try {
@@ -46,17 +45,6 @@ const UsersList = ({ searchKey }) => {
     if (chat) {
       dispatch(SetSelectedChat(chat));
     }
-  };
-
-  const getData = () => {
-    return allUsers.filter(
-      (userObj) =>
-        (userObj.name.toLowerCase().includes(searchKey.toLowerCase()) &&
-          searchKey) ||
-        allChats.some((chatObj) =>
-          chatObj.members.map((mem) => mem._id).includes(userObj._id)
-        )
-    );
   };
 
   const isSelectedChat = (rUserId) => {
@@ -109,6 +97,41 @@ const UsersList = ({ searchKey }) => {
     }
     return null;
   };
+
+  const getData = () => {
+    const test = allUsers.filter(
+      (userObj) =>
+        (userObj.name.toLowerCase().includes(searchKey.toLowerCase()) &&
+          searchKey) ||
+        allChats.some((chatObj) =>
+          chatObj.members.map((mem) => mem._id).includes(userObj._id)
+        )
+    );
+    // sort users by last message
+    test.sort((a, b) => {
+      const aChat = allChats.find((chat) =>
+        chat.members.map((mem) => mem._id).includes(a._id)
+      );
+      const bChat = allChats.find((chat) =>
+        chat.members.map((mem) => mem._id).includes(b._id)
+      );
+      if (aChat && bChat) {
+        const aDate = new Date(aChat?.lastMessage?.createdAt);
+        const bDate = new Date(bChat?.lastMessage?.createdAt);
+        return bDate - aDate;
+      }
+      if (aChat && !bChat) {
+        return -1;
+      }
+      if (!aChat && bChat) {
+        return 1;
+      }
+      return 0;
+    });
+
+    return test;
+  };
+
   return (
     <div className='flex flex-col gap-3 mt-5 w-96'>
       {getData().map((userObj) => {
