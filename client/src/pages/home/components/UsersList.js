@@ -116,8 +116,8 @@ const UsersList = ({ searchKey }) => {
         chat.members.map((mem) => mem._id).includes(b._id)
       );
       if (aChat && bChat) {
-        const aDate = new Date(aChat?.lastMessage?.createdAt);
-        const bDate = new Date(bChat?.lastMessage?.createdAt);
+        const aDate = new Date(aChat?.updatedAt);
+        const bDate = new Date(bChat?.updatedAt);
         return bDate - aDate;
       }
       if (aChat && !bChat) {

@@ -26,11 +26,11 @@ const ChatArea = () => {
         text: newMessage,
       };
       const response = await SendMessage(message);
-      // const response1 = await GetMessages(selectedChat._id);
+      const response1 = await GetMessages(selectedChat._id);
       // dispatch(hideLoader());
       if (response.success) {
         setNewMessage('');
-        // setMessages(response1.data);
+        setMessages(response1.data);
       }
     } catch (error) {
       dispatch(hideLoader());
