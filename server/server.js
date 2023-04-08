@@ -10,8 +10,22 @@ const chatRoutes = require('./routes/chatsRoute');
 const messageRoutes = require('./routes/messageRoute');
 app.use(express.json());
 
+const server = require('http').createServer(app);
+
+const io = require('socket.io')(server, {
+  cors: {
+    origin: 'http://localhost:3000',
+    methods: ['GET', 'POST'],
+  },
+});
+
+// check the connection of socket from client
+io.on('connection', (socket) => {
+  console.log('connected wit socket id: ', socket.id);
+});
+
 app.use('/api/users', userRoutes);
 app.use('/api/chats', chatRoutes);
 app.use('/api/messages', messageRoutes);
 
-app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
+server.listen(PORT, () => console.log(`Server started on port ${PORT}`));
